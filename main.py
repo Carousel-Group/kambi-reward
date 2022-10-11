@@ -11,7 +11,6 @@ import pytz
 from datetime import datetime 
 from requests import get
 import numpy as np
-from argparse import ArgumentParser
 
 
 def upload_data_bq(table_id, df):
@@ -83,9 +82,6 @@ def merge_incremental_results(resource):
         sys.exit(1)
 
     
-parser = ArgumentParser()
-parser.add_argument('--certs', help='tuple (cert_path,key_path)', required=True)
-args = parser.parse_args()
 
 
 ##url = "https://operator-api.ext.kambi.com/message-feed/api/reward/maximbet/v1/from/1"
@@ -93,11 +89,10 @@ args = parser.parse_args()
 url = 'https://operator-api.ext.kambi.com/message-feed/api/reward/maximbet/v1/latest'
 
 
-certs = tuple((args.certs).strip(',').split(','))
-##certs = 'cert_kambi_prod.pem','private_key_kambi_prod.pem' 
+certs = 'cert_kambi_prod.pem','private_key_kambi_prod.pem' 
 headers = {'Content-type': 'application/json'}
 destination = "cg-maximbet-bi.stage.kambi_bmc_rewards"
-host = 'https://operator-api.ext.kambi.com/message-feed/api'       #"https://cts-operator.api.kambi.com/message-feed/api"    
+host = 'https://operator-api.ext.kambi.com/message-feed/api'       
 resource = 'reward' 
 
 
