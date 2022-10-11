@@ -1,6 +1,6 @@
 FROM python:3.8
 
-ADD bmc.py .
+ADD main.py .
 ADD cert_kambi_prod.pem .
 ADD private_key_kambi_prod.pem .
 ADD keyfile.json .
