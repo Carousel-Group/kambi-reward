@@ -77,6 +77,7 @@ def merge_incremental_results(resource):
         job.result() # Wating the completition of the Job
         print("This procedure processed {} bytes.".format(job.total_bytes_processed))
         print(job.total_bytes_processed)
+        return result.total_rows, job.total_bytes_processed
     except Exception as err:
         print(f'An error occurred: {err}')
         sys.exit(1)
@@ -92,6 +93,7 @@ url = 'https://operator-api.ext.kambi.com/message-feed/api/reward/maximbet/v1/la
 certs = 'cert_kambi_prod.pem','private_key_kambi_prod.pem' 
 headers = {'Content-type': 'application/json'}
 destination = "cg-maximbet-bi.stage.kambi_bmc_rewards"
+destination_logs = "cg-maximbet-bi.data.kambi_bmc_logs"
 host = 'https://operator-api.ext.kambi.com/message-feed/api'       
 resource = 'reward' 
 
@@ -110,6 +112,7 @@ except Exception as err:
         
 def main():
     try:
+        start_time = time.time()
         url_messageID = '{0}/{1}/maximbet/v1/latest'.format(host,resource)
         r_messageId = requests.get(url_messageID, headers=headers, cert=certs)
         r_messageId.raise_for_status()
@@ -161,8 +164,23 @@ def main():
     
         upload_data_bq(destination,df)
         print("df uploaded to stage")
-        merge_incremental_results(resource= resource)
-        print("procedure called")
+        
+        merge_results = merge_incremental_results(resource= resource)
+        number_of_rows = merge_results[0]
+        bytes_processed = merge_results[1]
+        processingTime = (time.time() - start_time)
+        print(number_of_rows,bytes_processed,processingTime)
+        
+        df_logs = {
+            "time":datetime.now(pytz.timezone('US/Eastern')).strftime("%m/%d/%Y, %H:%M:%S"), 
+            "destination":resource, 
+            "rows_added":number_of_rows,
+            "bytes_processed":bytes_processed, 
+            "processingTime":processingTime
+            }
+        
+        df_logs = pd.DataFrame(df_logs, index = [0] )
+        upload_data_bq(destination_logs,df_logs)
     
     except HTTPError as http_err:
         print(f'HTTPError: {http_err}' )
