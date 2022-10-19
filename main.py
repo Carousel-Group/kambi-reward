@@ -13,7 +13,7 @@ from requests import get
 import numpy as np
 
 
-def upload_data_bq(table_id, df):
+def upload_data_bq(table_id, df,truncate_append):
 
     data_types = {
         'object' : 'STRING',
@@ -43,7 +43,7 @@ def upload_data_bq(table_id, df):
     
     job_config = bigquery.LoadJobConfig(
         schema=schema,
-        write_disposition = 'WRITE_TRUNCATE'
+        write_disposition = truncate_append
     )
 
     job = client.load_table_from_dataframe(df,table_id, job_config=job_config)
@@ -162,7 +162,7 @@ def main():
     
         print(df.dtypes)
     
-        upload_data_bq(destination,df)
+        upload_data_bq(destination,df,"WRITE_TRUNCATE")
         print("df uploaded to stage")
         
         merge_results = merge_incremental_results(resource= resource)
@@ -180,7 +180,7 @@ def main():
             }
         
         df_logs = pd.DataFrame(df_logs, index = [0] )
-        upload_data_bq(destination_logs,df_logs)
+        upload_data_bq(destination_logs,df_logs,"WRITE_APPEND")
     
     except HTTPError as http_err:
         print(f'HTTPError: {http_err}' )
