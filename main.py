@@ -13,7 +13,7 @@ from requests import get
 import numpy as np
 
 
-def upload_data_bq(table_id, df,truncate_append):
+def upload_data_bq(table_id, df,append_truncate):
 
     data_types = {
         'object' : 'STRING',
@@ -43,7 +43,7 @@ def upload_data_bq(table_id, df,truncate_append):
     
     job_config = bigquery.LoadJobConfig(
         schema=schema,
-        write_disposition = truncate_append
+        write_disposition = append_truncate
     )
 
     job = client.load_table_from_dataframe(df,table_id, job_config=job_config)
