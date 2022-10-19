@@ -59,9 +59,9 @@ def upload_data_bq(table_id, df):
     print(table.num_rows)
     print(len(table.schema))
     print(table_id)
-
+    
 def merge_incremental_results(resource):
-        
+    
     credentials = service_account.Credentials.from_service_account_file(
     "keyfile.json", scopes=["https://www.googleapis.com/auth/cloud-platform"]
                   )
@@ -76,15 +76,13 @@ def merge_incremental_results(resource):
         print('Merging results in DataModel...calling routines')
         job.result() # Wating the completition of the Job
         print("This procedure processed {} bytes.".format(job.total_bytes_processed))
-        #print(job.total_bytes_processed)
+        print(job.total_bytes_processed)
         result = job.result()
-        print("This procedure processed {} bytes.".format(job.total_bytes_processed))
         return result.total_rows, job.total_bytes_processed
+
     except Exception as err:
         print(f'An error occurred: {err}')
         sys.exit(1)
-
-    
 
 
 ##url = "https://operator-api.ext.kambi.com/message-feed/api/reward/maximbet/v1/from/1"
