@@ -78,6 +78,7 @@ def merge_incremental_results(resource):
         print("This procedure processed {} bytes.".format(job.total_bytes_processed))
         #print(job.total_bytes_processed)
         result = job.result()
+        print("This procedure processed {} bytes.".format(job.total_bytes_processed))
         return result.total_rows, job.total_bytes_processed
     except Exception as err:
         print(f'An error occurred: {err}')
