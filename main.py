@@ -76,7 +76,8 @@ def merge_incremental_results(resource):
         print('Merging results in DataModel...calling routines')
         job.result() # Wating the completition of the Job
         print("This procedure processed {} bytes.".format(job.total_bytes_processed))
-        print(job.total_bytes_processed)
+        #print(job.total_bytes_processed)
+        result = job.result()
         return result.total_rows, job.total_bytes_processed
     except Exception as err:
         print(f'An error occurred: {err}')
