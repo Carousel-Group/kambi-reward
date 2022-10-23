@@ -160,7 +160,7 @@ def main():
         df.minCombinationOdds = df.minCombinationOdds.astype(np.float64)
         df.regulations = df.regulations.map(str)           
         df.tags = df.tags.map(str)
-        df.eventGroupIds = df.eventGroupIds.map(eventGroupIds)
+        df.eventGroupIds = df.eventGroupIds.map(str)
     
         print(df.dtypes)
     
