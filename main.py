@@ -137,7 +137,8 @@ def main():
            'maxExtraWinnings',
            'eventIds', 'betBuilder',
            'minCombinationOdds', 'regulations',
-           'tags']
+           'tags','eventGroupIds']
+        
         df.messageId = df.messageId.astype(np.int64)              
         df.messageType  = df.messageType.map(str)           
         df.timestamp   = df.timestamp.map(str)            
@@ -159,6 +160,7 @@ def main():
         df.minCombinationOdds = df.minCombinationOdds.astype(np.float64)
         df.regulations = df.regulations.map(str)           
         df.tags = df.tags.map(str)
+        df.eventGroupIds = df.eventGroupIds.map(eventGroupIds)
     
         print(df.dtypes)
     
