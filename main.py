@@ -13,6 +13,16 @@ from requests import get
 import numpy as np
 
 
+def get_rows_tables(table_id):
+    credentials = service_account.Credentials.from_service_account_file(
+        "keyfile.json", scopes=["https://www.googleapis.com/auth/cloud-platform"]
+                  )
+    client = bigquery.Client(credentials=credentials, project=credentials.project_id,)
+  
+    table = client.get_table(table_id)
+    print(table.num_rows, table_id)
+    return table.num_rows
+
 def upload_data_bq(table_id, df,append_truncate):
 
     data_types = {
@@ -163,7 +173,8 @@ def main():
         df.eventGroupIds = df.eventGroupIds.map(str)
     
         print(df.dtypes)
-    
+        init_rows = get_rows_tables("cg-maximbet-bi.data.kambi_bmc_rewards")
+
         upload_data_bq(destination,df,"WRITE_TRUNCATE")
         print("df uploaded to stage")
         
@@ -171,12 +182,15 @@ def main():
         number_of_rows = merge_results[0]
         bytes_processed = merge_results[1]
         processingTime = (time.time() - start_time)
-        print(number_of_rows,bytes_processed,processingTime)
-        
+        #print(number_of_rows,bytes_processed,processingTime)
+        desti_rows = get_rows_tables("cg-maximbet-bi.data.kambi_bmc_rewards")
+        loaded_rows = desti_rows - init_rows
+
+
         df_logs = {
             "time":datetime.now(pytz.timezone('US/Eastern')).strftime("%m/%d/%Y, %H:%M:%S"), 
             "destination":resource, 
-            "rows_added":number_of_rows,
+            "rows_added":loaded_rows,
             "bytes_processed":bytes_processed, 
             "processingTime":processingTime
             }
