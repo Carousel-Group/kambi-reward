@@ -43,7 +43,7 @@ def upload_data_bq(table_id, df,append_truncate):
     columns = df.dtypes.replace(data_types)
     column_names = columns.index
     column_types = columns.values
-    print(column_types)
+    #print(column_types)
 
     schema = []
     for column_name, column_type in zip(column_names, column_types):
@@ -86,7 +86,7 @@ def merge_incremental_results(resource):
         print('Merging results in DataModel...calling routines')
         job.result() # Wating the completition of the Job
         print("This procedure processed {} bytes.".format(job.total_bytes_processed))
-        print(job.total_bytes_processed)
+        #print(job.total_bytes_processed)
         result = job.result()
         return result.total_rows, job.total_bytes_processed
 
@@ -186,7 +186,7 @@ def main():
         df.tags = df.tags.map(str)
         df.eventGroupIds = df.eventGroupIds.map(str)
     
-        print(df.dtypes)
+        #print(df.dtypes)
         init_rows = get_rows_tables("cg-maximbet-bi.data.kambi_bmc_rewards")
 
         upload_data_bq(destination,df,"WRITE_TRUNCATE")
@@ -196,10 +196,11 @@ def main():
         number_of_rows = merge_results[0]
         bytes_processed = merge_results[1]
         processingTime = (time.time() - start_time)
-        #print(number_of_rows,bytes_processed,processingTime)
+        
         desti_rows = get_rows_tables("cg-maximbet-bi.data.kambi_bmc_rewards")
         loaded_rows = desti_rows - init_rows
-
+        
+        print(f"loaded rows {loaded_rows},bytes processed {bytes_processed} and processing time {processingTime})
 
         df_logs = {
             "time":datetime.now(pytz.timezone('US/Eastern')).strftime("%m/%d/%Y, %H:%M:%S"), 
@@ -211,6 +212,7 @@ def main():
         
         df_logs = pd.DataFrame(df_logs, index = [0] )
         upload_data_bq(destination_logs,df_logs,"WRITE_APPEND")
+        print("finished loading logs into table")
         
         if len(df.columns) != len_df:
             print(f"error in columns dimension expected {len_df} got {len(df.columns)} columns, (df loded into bigquery)")
