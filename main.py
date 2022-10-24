@@ -187,7 +187,7 @@ def main():
         df.eventGroupIds = df.eventGroupIds.map(str)
     
         #print(df.dtypes)
-        init_rows = get_rows_tables("cg-maximbet-bi.data.kambi_bmc_rewards")
+        #init_rows = get_rows_tables("cg-maximbet-bi.data.kambi_bmc_rewards")
 
         upload_data_bq(destination,df,"WRITE_TRUNCATE")
         print("df uploaded to stage")
@@ -197,15 +197,15 @@ def main():
         bytes_processed = merge_results[1]
         processingTime = (time.time() - start_time)
         
-        desti_rows = get_rows_tables("cg-maximbet-bi.data.kambi_bmc_rewards")
-        loaded_rows = desti_rows - init_rows
+        #desti_rows = get_rows_tables("cg-maximbet-bi.data.kambi_bmc_rewards")
+        #loaded_rows = desti_rows - init_rows
         
-        print(f"loaded rows {loaded_rows},bytes processed {bytes_processed} and processing time {processingTime})
+        #print(f"loaded rows {loaded_rows},bytes processed {bytes_processed} and processing time {processingTime})
 
         df_logs = {
             "time":datetime.now(pytz.timezone('US/Eastern')).strftime("%m/%d/%Y, %H:%M:%S"), 
             "destination":resource, 
-            "rows_added":loaded_rows,
+            "rows_added":0,
             "bytes_processed":bytes_processed, 
             "processingTime":processingTime
             }
