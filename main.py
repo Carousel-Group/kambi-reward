@@ -136,8 +136,22 @@ def main():
         output = r.json()
 
         df = pd.json_normalize(output,record_path=['messages'])
+        len_df = len(df.columns)
 
         print("messages OK")
+        
+         df = df[['messageId', 'messageType', 'timestamp', 'reward.rewardId',
+            'reward.rewardType', 'reward.customerPlayerId', 'reward.status',
+            'reward.activationDate', 'reward.expirationDate', 'reward.couponRef',
+            'reward.rewardTemplateId', 'reward.isGroupReward', 'reward.currency',
+            'reward.profitBoostProperties.boostPercentage',
+            'reward.profitBoostProperties.maxStake',
+            'reward.profitBoostProperties.maxExtraWinnings',
+            'reward.criteria.eventIds', 'reward.criteria.betBuilder',
+            'reward.criteria.minCombinationOdds', 'reward.criteria.regulations',
+            'reward.metadata.tags', 'reward.criteria.eventGroupIds']]
+
+        
         df.columns = ['messageId', 'messageType', 'timestamp', 'rewardId',
            'rewardType', 'customerPlayerId', 'status',
            'activationDate', 'expirationDate', 'couponRef',
@@ -197,6 +211,10 @@ def main():
         
         df_logs = pd.DataFrame(df_logs, index = [0] )
         upload_data_bq(destination_logs,df_logs,"WRITE_APPEND")
+        
+        if len(df.columns) != len_df:
+            print(f"error in columns dimension expected {len_df} got {len(df.columns)} columns, (df loded into bigquery)")
+            sys.exit(1)
     
     except HTTPError as http_err:
         print(f'HTTPError: {http_err}' )
