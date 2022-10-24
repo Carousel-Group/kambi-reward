@@ -140,7 +140,7 @@ def main():
 
         print("messages OK")
         
-         df = df[['messageId', 'messageType', 'timestamp', 'reward.rewardId',
+        df = df[['messageId', 'messageType', 'timestamp', 'reward.rewardId',
             'reward.rewardType', 'reward.customerPlayerId', 'reward.status',
             'reward.activationDate', 'reward.expirationDate', 'reward.couponRef',
             'reward.rewardTemplateId', 'reward.isGroupReward', 'reward.currency',
