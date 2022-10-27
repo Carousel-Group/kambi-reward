@@ -163,28 +163,36 @@ def main():
            'minCombinationOdds', 'regulations',
            'tags','eventGroupIds']
         
-        df.messageId = df.messageId.astype(np.int64)              
         df.messageType  = df.messageType.map(str)           
         df.timestamp   = df.timestamp.map(str)            
-        df.rewardId  = df.rewardId.astype(np.int64)
         df.rewardType   = df.rewardType.map(str)          
         df.customerPlayerId  = df.customerPlayerId.map(str)     
         df.status  = df.status.map(str)               
         df.activationDate   = df.activationDate.map(str)       
         df.expirationDate  = df.expirationDate.map(str)        
-        df.couponRef   = df.couponRef.astype(np.int64)            
-        df.rewardTemplateId = df.rewardTemplateId.astype(np.int64)      
         df.isGroupReward  = df.isGroupReward.map(str)          
         df.currency  = df.currency.map(str)               
-        df.boostPercentage  = df.boostPercentage.astype(np.int64)       
-        df.maxStake  = df.maxStake.astype(np.float64)           
-        df.maxExtraWinnings = df.maxExtraWinnings.astype(np.float64)
         df.eventIds = df.eventIds.map(str)             
         df.betBuilder  = df.betBuilder.map(str)             
-        df.minCombinationOdds = df.minCombinationOdds.astype(np.float64)
         df.regulations = df.regulations.map(str)           
         df.tags = df.tags.map(str)
         df.eventGroupIds = df.eventGroupIds.map(str)
+        
+        df = df.fillna(0)
+        
+        df.messageId = df.messageId.astype(np.int64)   
+        df.rewardId  = df.rewardId.astype(np.int64)
+        df.couponRef   = df.couponRef.astype(np.int64) 
+        df.rewardTemplateId = df.rewardTemplateId.astype(np.int64) 
+        df.boostPercentage  = df.boostPercentage.astype(np.int64)       
+        df.maxStake  = df.maxStake.astype(np.float64)           
+        df.maxExtraWinnings = df.maxExtraWinnings.astype(np.float64)
+        df.minCombinationOdds = df.minCombinationOdds.astype(np.float64)
+
+
+
+
+
     
         #print(df.dtypes)
         init_rows = get_rows_tables("cg-maximbet-bi.data.kambi_bmc_rewards")
