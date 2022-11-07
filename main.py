@@ -147,7 +147,7 @@ def main():
             'reward.profitBoostProperties.boostPercentage',
             'reward.profitBoostProperties.maxStake',
             'reward.profitBoostProperties.maxExtraWinnings',
-            'reward.criteria.eventIds', 'reward.criteria.betBuilder',
+            'reward.criteria.betBuilder',
             'reward.criteria.minCombinationOdds', 'reward.criteria.regulations',
             'reward.metadata.tags', 'reward.criteria.eventGroupIds']]
 
@@ -159,7 +159,7 @@ def main():
            'boostPercentage',
            'maxStake',
            'maxExtraWinnings',
-           'eventIds', 'betBuilder',
+           'betBuilder',
            'minCombinationOdds', 'regulations',
            'tags','eventGroupIds']
         
@@ -172,7 +172,6 @@ def main():
         df.expirationDate  = df.expirationDate.map(str)        
         df.isGroupReward  = df.isGroupReward.map(str)          
         df.currency  = df.currency.map(str)               
-        df.eventIds = df.eventIds.map(str)             
         df.betBuilder  = df.betBuilder.map(str)             
         df.regulations = df.regulations.map(str)           
         df.tags = df.tags.map(str)
